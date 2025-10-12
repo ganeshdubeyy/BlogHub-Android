@@ -842,7 +842,7 @@ Post detail screen opens
 
 ---
 
-### **Key Points to Mention**
+### **Key Points about the APP**
 
 - ✅ 100% Jetpack Compose (modern UI)
 - ✅ Material Design 3 (latest design system)
@@ -855,24 +855,16 @@ Post detail screen opens
 
 ---
 
-## 📈 Future Enhancements
-
-- [ ] Comments on posts
-- [ ] Follow/Unfollow users
-- [ ] Search functionality
-- [ ] Post categories filter
-- [ ] Share posts
-- [ ] Bookmark posts
-- [ ] Rich text editor
-- [ ] Video support
-- [ ] Push notifications (FCM)
-- [ ] Analytics
-
----
-
 ## 📄 License
 
 This project is created for educational purposes.
 
 ---
-**Built with ❤️ using Kotlin, Jetpack Compose, and Firebase**
+
+---
+## 📄 Team
+
+Team Members :
+Ganesh Dubey, Ganesh Zinjad, Akash Akolkar, Aniketh CR
+
+---
