@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
@@ -16,11 +17,13 @@ import androidx.navigation.navArgument
 import com.example.bloghub.ui.screens.*
 import com.example.bloghub.viewmodel.AuthViewModel
 import com.example.bloghub.viewmodel.BlogViewModel
+import com.example.bloghub.viewmodel.BlogViewModelFactory
 import com.example.bloghub.viewmodel.ProfileViewModel
 
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
+    val context = LocalContext.current
     val authViewModel: AuthViewModel = viewModel()
     val authState by authViewModel.authState.collectAsState()
 
@@ -64,7 +67,10 @@ fun AppNavigation() {
                     navController.getBackStackEntry("main_flow")
                 }
                 // Get the ViewModel using the parent's ViewModelStoreOwner
-                val blogViewModel: BlogViewModel = viewModel(viewModelStoreOwner = parentEntry)
+                val blogViewModel: BlogViewModel = viewModel(
+                    viewModelStoreOwner = parentEntry,
+                    factory = BlogViewModelFactory(context.applicationContext as android.app.Application)
+                )
 
                 HomeScreen(
                     blogViewModel = blogViewModel,
@@ -99,7 +105,10 @@ fun AppNavigation() {
                 val parentEntry = remember(backStackEntry) {
                     navController.getBackStackEntry("main_flow")
                 }
-                val blogViewModel: BlogViewModel = viewModel(viewModelStoreOwner = parentEntry)
+                val blogViewModel: BlogViewModel = viewModel(
+                    viewModelStoreOwner = parentEntry,
+                    factory = BlogViewModelFactory(context.applicationContext as android.app.Application)
+                )
                 val postId = backStackEntry.arguments?.getString("postId")
 
                 AddEditBlogScreen(
@@ -113,7 +122,10 @@ fun AppNavigation() {
                 val parentEntry = remember(backStackEntry) {
                     navController.getBackStackEntry("main_flow")
                 }
-                val blogViewModel: BlogViewModel = viewModel(viewModelStoreOwner = parentEntry)
+                val blogViewModel: BlogViewModel = viewModel(
+                    viewModelStoreOwner = parentEntry,
+                    factory = BlogViewModelFactory(context.applicationContext as android.app.Application)
+                )
                 val currentUserId by authViewModel.authState.collectAsState()
 
                 MyBlogsScreen(
@@ -135,7 +147,10 @@ fun AppNavigation() {
                 val parentEntry = remember(backStackEntry) {
                     navController.getBackStackEntry("main_flow")
                 }
-                val blogViewModel: BlogViewModel = viewModel(viewModelStoreOwner = parentEntry)
+                val blogViewModel: BlogViewModel = viewModel(
+                    viewModelStoreOwner = parentEntry,
+                    factory = BlogViewModelFactory(context.applicationContext as android.app.Application)
+                )
                 val postId = backStackEntry.arguments?.getString("postId") ?: ""
 
                 BlogDetailScreen(

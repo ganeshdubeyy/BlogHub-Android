@@ -1,7 +1,8 @@
 package com.example.bloghub.viewmodel
 
+import android.app.Application
 import android.net.Uri
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.cloudinary.android.MediaManager
 import com.cloudinary.android.callback.ErrorInfo
@@ -12,6 +13,7 @@ import com.example.bloghub.data.BlogRepository
 import com.example.bloghub.data.model.NotificationRepository
 import com.example.bloghub.data.model.NotificationModel
 import com.example.bloghub.data.model.NotificationType
+import com.example.bloghub.util.NotificationHelper
 import com.google.firebase.Timestamp
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,10 +39,13 @@ data class BlogUiState(
 )
 
 class BlogViewModel(
+    application: Application,
     private val blogRepository: BlogRepository = BlogRepository(),
     private val authRepository: AuthRepository = AuthRepository(),
     private val notificationRepository: NotificationRepository = NotificationRepository()
-) : ViewModel() {
+) : AndroidViewModel(application) {
+
+    private val context = application.applicationContext
 
     private val _uiState = MutableStateFlow(BlogUiState())
     val uiState = _uiState.asStateFlow()
@@ -169,6 +174,8 @@ class BlogViewModel(
 
             blogRepository.createPost(newPost).onSuccess {
                 _uiState.update { it.copy(postSaved = true) } // Signal that save is complete
+                // Show notification for successful post creation
+                NotificationHelper.showBlogPublishedNotification(context, title)
             }.onFailure { exception ->
                 _uiState.update { it.copy(error = "Error creating post: ${exception.message}", allPostsLoading = false, myPostsLoading = false) }
             }
@@ -236,6 +243,8 @@ class BlogViewModel(
                         postId = postId,
                         postTitle = post.title
                     )
+                    // Show local notification to the post author
+                    showLikeNotificationToAuthor(userId, post.title)
                 }
             }.onFailure { exception ->
                 // If it fails, revert the optimistic update
@@ -276,6 +285,19 @@ class BlogViewModel(
                 notificationRepository.createNotification(notification)
             } catch (e: Exception) {
                 // Silently fail - notification creation shouldn't block the like action
+            }
+        }
+    }
+    
+    // Show local notification when someone likes your post
+    private fun showLikeNotificationToAuthor(actorUserId: String, postTitle: String) {
+        viewModelScope.launch {
+            try {
+                val actorProfile = authRepository.getUserProfile(actorUserId).getOrNull()
+                val likerName = actorProfile?.name ?: "Someone"
+                NotificationHelper.showLikeNotification(context, likerName, postTitle)
+            } catch (e: Exception) {
+                // Silently fail
             }
         }
     }

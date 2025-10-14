@@ -72,7 +72,7 @@ fun NotificationScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color(0xFFF8F9FF) // Light lavender background
+                    containerColor = MaterialTheme.colorScheme.surface
                 )
             )
         }
@@ -81,13 +81,13 @@ fun NotificationScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .background(Color(0xFFF8F9FF)) // Light lavender background
+                .background(MaterialTheme.colorScheme.background)
         ) {
             when {
                 uiState.isLoading -> {
                     CircularProgressIndicator(
                         modifier = Modifier.align(Alignment.Center),
-                        color = Color(0xFF6366F1) // Indigo color
+                        color = MaterialTheme.colorScheme.primary
                     )
                 }
                 uiState.error != null -> {
@@ -110,19 +110,19 @@ fun NotificationScreen(
                             imageVector = Icons.Default.Favorite,
                             contentDescription = null,
                             modifier = Modifier.size(64.dp),
-                            tint = Color(0xFFE0E7FF) // Light indigo
+                            tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f)
                         )
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(
                             text = "No notifications yet",
                             style = MaterialTheme.typography.titleMedium,
-                            color = Color(0xFF6B7280) // Gray
+                            color = MaterialTheme.colorScheme.onBackground
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             text = "When someone likes your posts, you'll see it here",
                             style = MaterialTheme.typography.bodyMedium,
-                            color = Color(0xFF9CA3AF) // Light gray
+                            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
                         )
                     }
                 }
@@ -153,9 +153,9 @@ private fun NotificationItem(
     onClick: () -> Unit
 ) {
     val backgroundColor = if (notification.isRead) {
-        Color.White
+        MaterialTheme.colorScheme.surface
     } else {
-        Color(0xFFEEF2FF) // Light indigo for unread
+        MaterialTheme.colorScheme.primaryContainer
     }
 
     Card(
@@ -189,12 +189,12 @@ private fun NotificationItem(
                     modifier = Modifier
                         .size(48.dp)
                         .clip(CircleShape)
-                        .background(Color(0xFF818CF8)), // Indigo
+                        .background(MaterialTheme.colorScheme.primary),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = notification.actorName.firstOrNull()?.uppercase() ?: "?",
-                        color = Color.White,
+                        color = MaterialTheme.colorScheme.onPrimary,
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp
                     )
@@ -214,7 +214,7 @@ private fun NotificationItem(
                             modifier = Modifier
                                 .size(8.dp)
                                 .clip(CircleShape)
-                                .background(Color(0xFF6366F1)) // Indigo
+                                .background(MaterialTheme.colorScheme.primary)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                     }
@@ -223,7 +223,7 @@ private fun NotificationItem(
                         text = notification.actorName,
                         fontWeight = FontWeight.Bold,
                         fontSize = 15.sp,
-                        color = Color(0xFF1F2937) // Dark gray
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 }
 
@@ -242,7 +242,7 @@ private fun NotificationItem(
                     Text(
                         text = "liked your post",
                         fontSize = 14.sp,
-                        color = Color(0xFF6B7280) // Gray
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                     )
                 }
 
@@ -252,7 +252,7 @@ private fun NotificationItem(
                     text = "\"${notification.postTitle}\"",
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Medium,
-                    color = Color(0xFF4F46E5), // Indigo
+                    color = MaterialTheme.colorScheme.primary,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -262,7 +262,7 @@ private fun NotificationItem(
                 Text(
                     text = formatTimestamp(notification.createdAt.toDate()),
                     fontSize = 12.sp,
-                    color = Color(0xFF9CA3AF) // Light gray
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
                 )
             }
         }

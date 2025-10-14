@@ -27,6 +27,7 @@ import com.example.bloghub.ui.components.AppDrawer
 import com.example.bloghub.ui.components.BlogCard
 import com.example.bloghub.ui.components.CategoryFilterBar
 import com.example.bloghub.ui.components.ConfirmationDialog
+import com.example.bloghub.util.RequestNotificationPermission
 import com.example.bloghub.viewmodel.AuthViewModel
 import com.example.bloghub.viewmodel.BlogViewModel
 import com.example.bloghub.viewmodel.NotificationViewModel
@@ -46,6 +47,9 @@ fun HomeScreen(
     onNavigateToBlogDetail: (String) -> Unit,
     onNavigateToNotifications: () -> Unit
 ) {
+    // Request notification permission (Android 13+)
+    RequestNotificationPermission()
+    
     val blogUiState by blogViewModel.uiState.collectAsState()
     val currentUser by authViewModel.currentUser.collectAsState()
     val notificationUiState by notificationViewModel.uiState.collectAsState()
